@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.muhammedcbkc.dto.DtoStudent;
+import com.muhammedcbkc.dto.DtoStudentIU;
 import com.muhammedcbkc.entities.Student;
 import com.muhammedcbkc.repository.StudentRepository;
 import com.muhammedcbkc.services.IStudentService;
@@ -21,19 +25,39 @@ public class StudentServiceImpl implements IStudentService {
 	private StudentRepository studentRepository;
 	
 	@Override
-	public List<Student> getAllStudent() {
-		return studentRepository.findAll();
+	public List<DtoStudent> getAllStudent() {
+		List<DtoStudent> dtoStudentList = new ArrayList<DtoStudent>();
+		
+		List<Student> studentList = studentRepository.findAll();
+		
+		for (Student student : studentList) {
+			DtoStudent dto = new DtoStudent(); 
+			BeanUtils.copyProperties(student, dto);
+			dtoStudentList.add(dto);
+		}
+		return dtoStudentList;
 	}
 
 	@Override
-	public Student getStudentById(Integer id) {
-		return studentRepository.findById(id).orElse(null);
+	public DtoStudent getStudentById(Integer id) {
+		DtoStudent dtoStudent = new DtoStudent();
+		Optional<Student> optional = studentRepository.findById(id);
+		if (optional.isPresent()) {
+			Student dbStudent = optional.get();
+			BeanUtils.copyProperties(dbStudent, dtoStudent);
+		}
+		return dtoStudent;
 	}
 	
 	@Override
-	public Student saveStudent(Student student) {
-		return studentRepository.save(student);
-
+	public DtoStudent saveStudent(@RequestBody DtoStudentIU dtoStudentIU) {
+		DtoStudent response = new DtoStudent();
+		Student student = new Student();
+		BeanUtils.copyProperties(dtoStudentIU, student);
+		
+		Student dbStudent = studentRepository.save(student);
+		BeanUtils.copyProperties(dbStudent, response);
+		return response;
 	}
 
 	@Override	

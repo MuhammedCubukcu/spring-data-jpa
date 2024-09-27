@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.muhammedcbkc.controller.IStudentController;
+import com.muhammedcbkc.dto.DtoStudent;
+import com.muhammedcbkc.dto.DtoStudentIU;
 import com.muhammedcbkc.entities.Student;
 import com.muhammedcbkc.services.IStudentService;
 
@@ -28,13 +30,13 @@ public class StudentControllerImpl implements IStudentController {
 	
 	@GetMapping("/list")
 	@Override
-	public List<Student> getAllStudent() {
+	public List<DtoStudent> getAllStudent() {
 		return studentService.getAllStudent();
 	}
 	
 	@GetMapping("/list/{id}")
 	@Override
-	public Student getStudentById(@PathVariable(name="id", required = true) Integer id) {
+	public DtoStudent getStudentById(@PathVariable(name="id", required = true) Integer id) {
 		return studentService.getStudentById(id);
 	}
 	
@@ -48,8 +50,8 @@ public class StudentControllerImpl implements IStudentController {
 	
 	@PostMapping("/save")
 	@Override
-	public Student saveStudent(@RequestBody Student student) {
-		return studentService.saveStudent(student);
+	public DtoStudent saveStudent(@RequestBody DtoStudentIU dtoStudentIU) {
+		return studentService.saveStudent(dtoStudentIU);
 	}
 
 
