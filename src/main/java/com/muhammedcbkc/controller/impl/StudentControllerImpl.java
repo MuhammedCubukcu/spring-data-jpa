@@ -20,6 +20,8 @@ import com.muhammedcbkc.dto.DtoStudentIU;
 import com.muhammedcbkc.entities.Student;
 import com.muhammedcbkc.services.IStudentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/rest/api/student")
 public class StudentControllerImpl implements IStudentController {
@@ -50,7 +52,7 @@ public class StudentControllerImpl implements IStudentController {
 	
 	@PostMapping("/save")
 	@Override
-	public DtoStudent saveStudent(@RequestBody DtoStudentIU dtoStudentIU) {
+	public DtoStudent saveStudent(@RequestBody @Valid DtoStudentIU dtoStudentIU) {
 		return studentService.saveStudent(dtoStudentIU);
 	}
 
